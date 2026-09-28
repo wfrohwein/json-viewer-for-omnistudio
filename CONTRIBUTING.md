@@ -19,7 +19,7 @@ arrow on the extension card, then reload the Salesforce tab.
 ## Before you open a PR
 
 - **`npm test` passes.** CI runs it on every push and pull request.
-- **New behaviour comes with a test.** The three suites are the spec; if a
+- **New behaviour comes with a test.** The test suites are the spec; if a
   change isn't pinned down by one, it will quietly regress later.
 - **No new runtime dependencies.** The extension ships as plain JS with no build
   step, and that's worth keeping. `jsdom` is the only dev dependency.

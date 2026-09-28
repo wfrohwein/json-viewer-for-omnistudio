@@ -1,5 +1,7 @@
 # JSON Viewer for OmniStudio
 
+[![test](https://github.com/wfrohwein/json-viewer-for-omnistudio/actions/workflows/test.yml/badge.svg)](https://github.com/wfrohwein/json-viewer-for-omnistudio/actions/workflows/test.yml)
+
 A Chrome extension for Salesforce OmniStudio that shows the **live `jsonData`
 payload of the OmniScript step you're currently looking at**, and the data behind
 any **FlexCards** on the page, in a side panel — kept updated as you move between
@@ -335,6 +337,13 @@ version: `npm test` must pass, new behaviour comes with a test, no new runtime
 dependencies, no network calls, and **never commit real org data**. The fixtures
 are deliberately fictional and CI fails the build if a real-looking Salesforce
 host, org ID or token shows up.
+
+Every pull request is reviewed before it's merged, and CI must pass first.
+
+## Security
+
+Found a security problem? Please report it privately rather than in an issue.
+See [SECURITY.md](SECURITY.md).
 
 ## Privacy
 
