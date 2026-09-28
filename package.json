@@ -1,0 +1,13 @@
+{
+  "name": "json-viewer-for-omnistudio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension: live OmniScript jsonData and FlexCard records in a side panel",
+  "scripts": {
+    "test": "node test/test-scan.js && node test/test-other.js && node test/test-flexcard.js && node test/test-panel.js && node test/test-options.js",
+    "icons": "node tools/make-icons.js"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
+}

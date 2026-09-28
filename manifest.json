@@ -1,0 +1,75 @@
+{
+  "manifest_version": 3,
+  "name": "JSON Viewer for OmniStudio",
+  "version": "1.0.0",
+  "description": "Live view of the active OmniScript step's jsonData and FlexCard records in a side panel, with search.",
+  "minimum_chrome_version": "114",
+  "permissions": ["sidePanel", "scripting", "tabs", "storage", "unlimitedStorage", "activeTab"],
+  "host_permissions": [
+    "*://*.force.com/*",
+    "*://*.salesforce.com/*",
+    "*://*.my.site.com/*",
+    "*://*.salesforce-sites.com/*",
+    "*://*.visualforce.com/*",
+    "*://*.cloudforce.com/*",
+    "*://*.salesforce-experience.com/*"
+  ],
+  "optional_host_permissions": ["*://*/*"],
+  "action": {
+    "default_title": "Open JSON Viewer for OmniStudio",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.force.com/*",
+        "*://*.salesforce.com/*",
+        "*://*.my.site.com/*",
+        "*://*.salesforce-sites.com/*",
+        "*://*.visualforce.com/*",
+        "*://*.cloudforce.com/*",
+        "*://*.salesforce-experience.com/*"
+      ],
+      "js": ["content-main.js"],
+      "world": "MAIN",
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "*://*.force.com/*",
+        "*://*.salesforce.com/*",
+        "*://*.my.site.com/*",
+        "*://*.salesforce-sites.com/*",
+        "*://*.visualforce.com/*",
+        "*://*.cloudforce.com/*",
+        "*://*.salesforce-experience.com/*"
+      ],
+      "js": ["content-bridge.js"],
+      "world": "ISOLATED",
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ]
+}

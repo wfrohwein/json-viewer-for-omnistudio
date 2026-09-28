@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OmniScript JSON</title>
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <header class="bar bar--head">
+      <span id="dot" class="dot" title="Waiting for a page"></span>
+      <div class="head-text">
+        <div id="stepLabel" class="step-label">JSON Viewer for OmniStudio</div>
+        <div id="stepMeta" class="step-meta">Waiting for an OmniScript page…</div>
+      </div>
+      <button id="savesBtn" class="icon-btn" title="Saved payloads" aria-label="Saved payloads">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2h8a1 1 0 0 1 1 1v11l-5-3-5 3V3a1 1 0 0 1 1-1z"/></svg>
+        <span id="savesCount" class="badge hidden">0</span>
+      </button>
+      <button id="pause" class="icon-btn" title="Pause live updates" aria-label="Pause live updates">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="3" width="3" height="10" rx="1"/><rect x="9" y="3" width="3" height="10" rx="1"/></svg>
+      </button>
+      <button id="refresh" class="icon-btn" title="Refresh now" aria-label="Refresh now">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5A5.5 5.5 0 1 0 13.5 8h-1.6A3.9 3.9 0 1 1 8 4.1V6l3-2.75L8 .5z"/></svg>
+      </button>
+    </header>
+
+    <div id="pickers" class="bar bar--pickers">
+      <select id="scriptPick" class="select" title="Which OmniScript to read" aria-label="OmniScript"></select>
+      <select id="stepPick" class="select" title="Which step to read" aria-label="Step"></select>
+      <button id="unpin" class="pin-note hidden" title="Go back to following the rendered step">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5A5.5 5.5 0 1 0 13.5 8h-1.6A3.9 3.9 0 1 1 8 4.1V6l3-2.75L8 .5z"/></svg>
+        <span id="unpinText">Pinned — not following the page</span>
+      </button>
+    </div>
+
+    <div class="bar bar--search">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 9h-.8l-.3-.3A4.5 4.5 0 1 0 8.6 9.7l.3.3v.8l3.4 3.4 1.1-1.1zm-4 0A3 3 0 1 1 9.5 6a3 3 0 0 1-3 3z"/></svg>
+        <input id="search" type="search" placeholder="Search keys and values…" spellcheck="false" autocomplete="off" />
+      </div>
+      <span id="count" class="count"></span>
+      <button id="prev" class="icon-btn sm" title="Previous match (Shift+Enter)" aria-label="Previous match">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 5l5 6H3z"/></svg>
+      </button>
+      <button id="next" class="icon-btn sm" title="Next match (Enter)" aria-label="Next match">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 11L3 5h10z"/></svg>
+      </button>
+      <button id="filter" class="icon-btn sm" title="Show only matching branches" aria-label="Filter to matches">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3h12l-4.6 5.4V13L6.6 11.4V8.4z"/></svg>
+      </button>
+    </div>
+
+    <div id="tools" class="bar bar--tools">
+      <div class="segmented" role="tablist" aria-label="View mode">
+        <button id="viewTree" class="seg is-on" role="tab" aria-selected="true">Tree</button>
+        <button id="viewRaw" class="seg" role="tab" aria-selected="false">Raw</button>
+      </div>
+      <select id="source" class="select" title="Payload source" aria-label="Payload source"></select>
+      <span class="spacer"></span>
+      <button id="expand" class="text-btn" title="Expand all">Expand</button>
+      <button id="collapse" class="text-btn" title="Collapse all">Collapse</button>
+      <button id="copy" class="text-btn" title="Copy the whole payload">Copy</button>
+      <button id="save" class="text-btn accent" title="Save a snapshot of this payload">Save</button>
+    </div>
+
+    <div id="banner" class="banner hidden">
+      <svg class="banner-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2h8a1 1 0 0 1 1 1v11l-5-3-5 3V3a1 1 0 0 1 1-1z"/></svg>
+      <div class="banner-text">
+        <div id="bannerTitle" class="banner-title"></div>
+        <div id="bannerMeta" class="banner-meta"></div>
+      </div>
+      <button id="bannerDiff" class="text-btn">Compare</button>
+      <button id="backLive" class="text-btn">Back to live</button>
+    </div>
+
+    <div id="diffBar" class="bar bar--diff hidden">
+      <select id="diffA" class="select" title="Baseline" aria-label="Baseline"></select>
+      <button id="diffSwap" class="icon-btn sm" title="Swap sides" aria-label="Swap sides">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.5h8V2l4 3.5L11 9V6.5H3zM13 11.5H5V14l-4-3.5L5 7v2.5h8z"/></svg>
+      </button>
+      <select id="diffB" class="select" title="Compared with" aria-label="Compared with"></select>
+      <button id="diffClose" class="text-btn" title="Close the comparison">Close</button>
+    </div>
+
+    <main id="body" class="body">
+      <div id="empty" class="empty">
+        <div class="empty-title">No OmniScript detected yet</div>
+        <p class="empty-text">
+          Open a Salesforce page with an embedded OmniScript. The panel shows the
+          <code>jsonData</code> of whichever step is currently rendered, and follows you
+          as you move between steps. When there's no OmniScript to read, it falls back
+          to any other element on the page that's holding JSON.
+        </p>
+        <button id="grant" class="cta hidden">Enable on this site</button>
+        <button id="inject" class="cta ghost">Scan this page</button>
+        <div id="emptyHint" class="empty-hint"></div>
+        <button id="manageSites" class="link-btn">Manage sites…</button>
+      </div>
+      <div id="tree" class="tree hidden"></div>
+      <pre id="raw" class="raw hidden"></pre>
+      <div id="saves" class="saves hidden"></div>
+      <div id="diff" class="diff hidden"></div>
+    </main>
+
+    <footer class="bar bar--foot">
+      <code id="path" class="path" title="Path of the selected node">$</code>
+      <button id="copyPath" class="text-btn" title="Copy path">Path</button>
+      <button id="copyValue" class="text-btn" title="Copy value">Value</button>
+      <span id="stats" class="stats"></span>
+    </footer>
+
+    <div id="changePill" class="change-pill hidden">
+      <button id="changeJump" class="change-jump" title="Jump to a change you can't see">
+        <span class="change-dot"></span>
+        <span id="changePillText"></span>
+      </button>
+      <button id="changeDismiss" class="change-dismiss" title="Clear the change markers" aria-label="Clear the change markers">✕</button>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

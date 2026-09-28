@@ -1,0 +1,46 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install
+      - run: npm test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax-check every source file
+        run: |
+          for f in background.js content-main.js content-bridge.js sidepanel.js options.js tools/make-icons.js; do
+            node --check "$f"
+          done
+          node -e 'JSON.parse(require("fs").readFileSync("manifest.json","utf8"))'
+      - name: Fail on real-looking org data in fixtures
+        run: |
+          if grep -rniE 'sandbox\.my\.site\.com' --include='*.js' --include='*.md' . \
+             | grep -v node_modules | grep -v 'example--dev'; then
+            echo "::error::A non-fictional Salesforce host appears in the repo. See CONTRIBUTING.md."
+            exit 1
+          fi
+          if grep -rnE '\b00D[A-Za-z0-9]{12,}\b|\beyJ[A-Za-z0-9_-]{20,}' \
+             --include='*.js' --include='*.md' --include='*.json' . | grep -v node_modules; then
+            echo "::error::What looks like a Salesforce org ID or a JWT is committed."
+            exit 1
+          fi
