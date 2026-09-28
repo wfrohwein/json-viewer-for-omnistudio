@@ -28,10 +28,12 @@ ever transmitted anywhere. It has no runtime dependencies and no build step.
 
 ## Install
 
-1. Open `chrome://extensions`
-2. Turn on **Developer mode** (top right)
-3. **Load unpacked** → select this folder
-4. Open an OmniScript page and click the extension icon in the toolbar
+1. Download the zip from the [latest release](https://github.com/wfrohwein/json-viewer-for-omnistudio/releases/latest)
+   and unzip it (or clone this repo)
+2. Open `chrome://extensions`
+3. Turn on **Developer mode** (top right)
+4. **Load unpacked** → select the unzipped `json-viewer-for-omnistudio` folder
+5. Open an OmniScript or FlexCard page and click the extension icon in the toolbar
 
 The side panel opens on the right. Pin the extension to the toolbar
 (puzzle-piece icon → pin) so the icon is always one click away.
